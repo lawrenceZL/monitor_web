@@ -62,7 +62,7 @@ class Monitor extends Component {
         this.getCity(qrcode);
         setInterval(() => this.getIndoor(qrcode), 10000)
         setInterval(() => this.tick(), 1000)
-        setInterval(() => this.getCity(qrcode), 10000)
+        setInterval(() => this.getCity(qrcode), 100000)
         setInterval(() => this.getOutdoor(this.state.cityId, this.state.provinceId), 1000)
     }
 
