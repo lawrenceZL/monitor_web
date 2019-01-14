@@ -61,10 +61,12 @@ class Monitor extends Component {
         this.getIndoor(qrcode);
         this.getCity(qrcode);
         setInterval(() => this.getIndoor(qrcode), 10000)
-        setInterval(() => this.tick(), 1000)
-        setInterval(() => this.getCity(qrcode), 100000)
-        setInterval(() => this.getOutdoor(this.state.cityId, this.state.provinceId), 1000)
+        setInterval(() => this.tick(), 10000)
+        setInterval(() => this.getCity(qrcode), 1800000)
+        // setInterval(() => this.getOutdoor(this.state.cityId, this.state.provinceId), 10000)
     }
+
+    //获取初始
 
     //根据qrcode获取室内信息,
     getIndoor(qrcode) {
@@ -109,10 +111,11 @@ class Monitor extends Component {
         })
     }
 
-    //根据qrcode查询城市
+    //根据qrcode查询城市，同时获取城市数值，
     getCity(qrcode) {
         machine_air_service.obtain_city(qrcode).then(response => {
             if (response.responseCode === "RESPONSE_OK") {
+                this.getOutdoor(response.data[0].cityId,this.state.provinceId);
                 this.setState({
                     cityId: response.data[0].cityId,
                 })
@@ -146,7 +149,27 @@ class Monitor extends Component {
         }
     }
 
+    pm2_5BackgroundColor(pm2_5){
+        let pm2_5_color;
+        if (pm2_5 >= 0 && pm2_5 <= 35) {
+            pm2_5_color = 'pm2_5_excellent'
+        } else if (pm2_5 > 35 && pm2_5 <= 75) {
+            pm2_5_color = 'pm2_5_moderate'
+        } else if (pm2_5 > 75 && pm2_5 <= 115) {
+            pm2_5_color = 'pm2_5_sensative';
+        } else if (pm2_5 > 115 && pm2_5 <= 150) {
+            pm2_5_color = 'pm2_5_unhealthy';
+        } else if (pm2_5 > 150 && pm2_5 <= 250) {
+            pm2_5_color = 'pm2_5_very_unhealthy';
+        } else {
+            pm2_5_color = 'pm2_5_hazardous';
+        }
+        return pm2_5_color;
+    }
+
     render() {
+        let indoor_pm2_5_color=this.pm2_5BackgroundColor(this.state.indoor_pm2_5);
+        let city_pm2_5_color=this.pm2_5BackgroundColor(this.state.city_pm2_5);
         return (
             <div>
                 <div className="monitor-header">
@@ -167,16 +190,16 @@ class Monitor extends Component {
                 <div className="monitor-indoor">
                     <div className="monitor-indoor-outdoor-header">
                         <span className="chinese-label">室内</span>
-                        <span className="english-label">{this.state.qrcode}</span>
+                        {/*<span className="english-label">{this.state.qrcode}</span>*/}
                     </div>
                     <div className="monitor-indoor-body">
-                        <div className="monitor-indoor-body-item">
+                        <div className={"monitor-indoor-body-item "}>
                             <div className="content_left">
                                 <img src={Air_quality} className="indoor-img"></img>
                                 <div className="content_left_text">PM2.5</div>
                             </div>
                             <div className="content_middle">
-                                空气质量<span className="font-bold">&nbsp;&nbsp;{this.pm2_5_render(this.state.indoor_pm2_5)}</span>
+                                空气<span className="font-bold">&nbsp;&nbsp;{this.pm2_5_render(this.state.indoor_pm2_5)}</span>
                             </div>
                             <div className="content_right">
                                 <span className="test_value">{this.state.indoor_pm2_5}</span>
@@ -235,23 +258,22 @@ class Monitor extends Component {
                         <span className="english-label">Outdoor</span>
                     </div>
                     <div className="monitor-outdoor-body">
-                        <div className="monitor-indoor-body-item">
+                        <div className={"monitor-indoor-body-item " + city_pm2_5_color}>
                             <div className="content_left">
                                 <img src={Air_quality} className="indoor-img"></img>
                                 <div className="content_left_text">AQI/PM2.5</div>
                             </div>
                             <div className="content_middle">
-                                空气质量<span className="font-bold">&nbsp;&nbsp;{this.pm2_5_render(this.state.city_pm2_5)}</span>
+                                空气<span className="font-bold">&nbsp;&nbsp;{this.pm2_5_render(this.state.city_pm2_5)}</span>
                             </div>
                             <div className="content_right">
                                 <div className="half-height">
                                     <span className="test_unit">AQI</span>
-                                    <span className="test_value">&nbsp;{this.state.aqi}</span>
+                                    <span className="test_value">&nbsp;&nbsp;{this.state.aqi}</span>
                                 </div>
                                 <div className="half-height">
                                     <span className="test_unit">PM2.5&nbsp;</span>
                                     <span className="test_value">{this.state.city_pm2_5}</span>
-                                    <span className="test_unit">&nbsp;ug/m<sup>3</sup></span>
                                 </div>
                             </div>
                         </div>

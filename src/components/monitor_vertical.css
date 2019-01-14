@@ -91,7 +91,7 @@
     }
 
 }
-@media screen and (min-width: 800px) and (max-width: 2000px){
+@media screen and (min-width: 800px) and (max-width: 1500px){
     .init-div {
         font-size: 30px;
         overflow: hidden;
@@ -123,6 +123,40 @@
     }
     .footer_text{
         font-size: 40px;
+    }
+}
+@media screen and (min-width: 1500px) and (max-width: 2000px){
+    .init-div {
+        font-size: 40px;
+        overflow: hidden;
+        margin: 0.1%;
+    }
+    .chinese-label {
+        font-size: 80px;
+        margin-left: 5%;
+    }
+    .english-label {
+        font-size: 50px;
+        margin-left: 3%;
+    }
+    .content_left_text{
+        font-size: 40px;
+    }
+    .content_middle{
+        width:40%;
+        font-size: 60px;
+    }
+    .content_middle_1{
+        font-size: 50px;
+    }
+    .test_value{
+        font-size: 80px;
+    }
+    .test_unit{
+        font-size: 40px;
+    }
+    .footer_text{
+        font-size: 50px;
     }
 }
 /*rotate image*/
@@ -245,4 +279,27 @@
 }
 .aqi-img {
     width: 100%;
+}
+.pm2_5_excellent {
+    background-color: #00CC66;
+}
+
+.pm2_5_moderate {
+    background-color: #CC9900;
+}
+
+.pm2_5_sensative {
+    background-color: #FF9966;
+}
+
+.pm2_5_unhealthy {
+    background-color: #FF0066
+}
+
+.pm2_5_very_unhealthy {
+    background-color: #990099;
+}
+
+.pm2_5_hazardous {
+    background-color: #996666;
 }
